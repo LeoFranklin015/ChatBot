@@ -122,6 +122,7 @@ function App() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type your message..."
+          className="textarea"
         ></textarea>
         <button type="submit">Send</button>
       </form>
