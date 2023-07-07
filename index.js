@@ -16,20 +16,20 @@ const openai = new OpenAIApi(configuration);
 
 app.use(cors());
 app.use(bodyParser.json());
-
+let messages = [
+  { role: "system", content: "You are a helpful code assistant." },
+];
 app.post("/", async (req, res) => {
   const { message } = req.body;
-  const response = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: `You are a chatbot to help solving programming questions from the user format the code in a presenatable manner..
-    > ${message}
-    Solution :`,
-    max_tokens: 1000,
-    temperature: 0,
+  messages.push({ role: "system", content: message });
+  const response = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: messages,
+    max_tokens: 100,
   });
-  console.log(response.data.choices[0].text);
-  if (response.data.choices[0].text) {
-    res.json({ message: response.data.choices[0].text });
+  console.log(response.data.choices[0].message);
+  if (response.data.choices[0].message) {
+    res.json({ message: response.data.choices[0].message });
   }
   // res.status(200).json("Hello World");
 });
